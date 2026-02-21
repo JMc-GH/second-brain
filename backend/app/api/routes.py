@@ -7,7 +7,7 @@ from app.models.document import Document
 from app.schemas.chat import ChatRequest, ChatResponse
 from app.schemas.document import DocumentOut
 from app.services.document_service import create_document, save_uploaded_file
-from app.services.news_service import ingest_news_feeds
+from app.services.news_service import fetch_uk_headlines, ingest_news_feeds
 from app.services.ollama_service import generate_answer
 
 router = APIRouter(prefix="/api")
@@ -36,6 +36,11 @@ def list_documents(db: Session = Depends(get_db)):
 def ingest_news(db: Session = Depends(get_db)):
     count = ingest_news_feeds(db)
     return {"ingested": count}
+
+
+@router.get("/news/uk")
+def uk_news_headlines(limit_per_feed: int = 5):
+    return fetch_uk_headlines(max_entries_per_feed=limit_per_feed)
 
 
 @router.post("/chat", response_model=ChatResponse)

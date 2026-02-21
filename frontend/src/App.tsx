@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { ChatPanel } from "./components/ChatPanel";
+import { Dashboard } from "./components/Dashboard";
 import { DocumentUpload } from "./components/DocumentUpload";
 import { ingestNews, listDocuments } from "./lib/api";
 
@@ -14,6 +15,7 @@ type Document = {
 function App() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [loadingDocs, setLoadingDocs] = useState(false);
+  const [page, setPage] = useState<"workspace" | "dashboard">("dashboard");
 
   const loadDocuments = async () => {
     try {
@@ -34,8 +36,45 @@ function App() {
     await loadDocuments();
   }
 
+  if (page === "dashboard") {
+    return (
+      <>
+        <nav className="mx-auto mt-4 flex max-w-5xl justify-end gap-2 px-6">
+          <button
+            className="rounded-md border border-cyan-500 bg-cyan-500/10 px-3 py-1.5 text-sm font-semibold text-cyan-300"
+            onClick={() => setPage("dashboard")}
+          >
+            Dashboard
+          </button>
+          <button
+            className="rounded-md border border-slate-700 px-3 py-1.5 text-sm font-semibold text-slate-200 hover:border-cyan-500"
+            onClick={() => setPage("workspace")}
+          >
+            Workspace
+          </button>
+        </nav>
+        <Dashboard />
+      </>
+    );
+  }
+
   return (
     <main className="mx-auto min-h-screen max-w-5xl space-y-6 p-6">
+      <nav className="flex justify-end gap-2">
+        <button
+          className="rounded-md border border-slate-700 px-3 py-1.5 text-sm font-semibold text-slate-200 hover:border-cyan-500"
+          onClick={() => setPage("dashboard")}
+        >
+          Dashboard
+        </button>
+        <button
+          className="rounded-md border border-cyan-500 bg-cyan-500/10 px-3 py-1.5 text-sm font-semibold text-cyan-300"
+          onClick={() => setPage("workspace")}
+        >
+          Workspace
+        </button>
+      </nav>
+
       <header>
         <p className="text-cyan-400">Second Brain</p>
         <h1 className="text-3xl font-bold">Document + News AI Workspace</h1>

@@ -45,3 +45,11 @@ export async function askQuestion(question: string) {
 
   return response.json();
 }
+
+export async function getUkHeadlines(limitPerFeed = 5) {
+  const response = await fetch(`${API_BASE_URL}/news/uk?limit_per_feed=${limitPerFeed}`);
+  if (!response.ok) {
+    throw new Error(`Could not fetch UK headlines: ${response.status}`);
+  }
+  return response.json();
+}
