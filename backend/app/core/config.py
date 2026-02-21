@@ -17,6 +17,12 @@ class Settings(BaseSettings):
             "https://www.theverge.com/rss/index.xml",
         ]
     )
+    uk_news_feeds: list[str] = Field(
+        default_factory=lambda: [
+            "http://feeds.bbci.co.uk/news/uk/rss.xml",
+            "https://www.theguardian.com/uk/rss",
+        ]
+    )
 
     class Config:
         env_file = ".env"
